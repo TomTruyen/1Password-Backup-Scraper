@@ -9,7 +9,7 @@ const GoogleDriveService = require('./google_drive_service');
 const converter = require('json-2-csv');
 const MailingService = require('./mailing_service');
 
-dotenv.config();
+dotenv.config({ path: __dirname + '/.env' });
 
 let browser;
 
@@ -141,6 +141,7 @@ async function tryReadItemDetails(page) {
 }
 
 async function tryExport(csv) {
+
   fs.writeFileSync(filePath, csv);
   await tryUploadToDrive();
 }
