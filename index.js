@@ -3,6 +3,7 @@ const os = require('os');
 const path = require('path');
 const dotenv = require('dotenv');
 const { launch } = require('puppeteer');
+const isPi = require('detect-rpi');
 const { getText, getTextByParts, getFavorited, tryOpenSectionByXPath, sleep } = require('./helpers');
 const GoogleDriveService = require('./google_drive_service');
 const converter = require('json-2-csv');
@@ -44,7 +45,12 @@ const PASSWORD_ITEM_DETAIL_FAVORITED_SELECTOR = '#item-details > header > div > 
 
 (async () => {
   // Launch browser
-  browser = await launch({ headless: true });
+  if(isPi()) {
+	browser = await launch({ headless: true, executablePath: 'chromium-browser' });
+  } else {
+	browser = await launch({ headless: true });  
+  }	  
+  
 
   // Navigate to 1Password
   const [page] = await browser.pages();
