@@ -121,10 +121,8 @@ async function tryExportPasswords(page) {
   await converter.json2csvAsync(csvData, async function (err, csv) {
     if (err) throw Error();
 
-    await tryWriteToFile(csv);
+    await tryExport(csv);
   });
-
-  await tryUploadToDrive();
 }
 
 async function tryReadItemDetails(page) {
@@ -142,10 +140,9 @@ async function tryReadItemDetails(page) {
   };
 }
 
-async function tryWriteToFile(csv) {
+async function tryExport(csv) {
   fs.writeFileSync(filePath, csv);
-
-  return filePath;
+  await tryUploadToDrive();
 }
 
 async function tryUploadToDrive() {
