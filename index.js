@@ -17,7 +17,7 @@ let browser;
 const EXPORT_GOOGLE_DRIVE_FILE_ID_PATH = process.env.EXPORT_GOOGLE_DRIVE_FILE_ID_PATH;
 const EXPORT_FILE_PATH = process.env.EXPORT_FILE_PATH;
 const EXPORT_FILE_NAME = process.env.EXPORT_FILE_NAME;
-const filePath = path.join(EXPORT_FILE_PATH ?? '', EXPORT_FILE_NAME);
+const filePath = __dirname + path.join(EXPORT_FILE_PATH ?? '', EXPORT_FILE_NAME);
 
 // Login credentials + URL
 const AUTH_EMAIL = process.env.AUTH_EMAIL;

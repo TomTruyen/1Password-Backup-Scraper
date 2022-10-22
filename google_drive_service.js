@@ -3,7 +3,7 @@ const { google } = require('googleapis');
 
 class GoogleDriveService {
   constructor(clientId, clientSecret, redirectUri, refreshToken, fileIdPath) {
-    this.fileIdPath = fileIdPath ?? 'drive_backup_file_id.txt';
+    this.fileIdPath = __dirname + (fileIdPath ?? 'drive_backup_file_id.txt');
     this.driveClient = this.createDriveClient(clientId, clientSecret, redirectUri, refreshToken);
   }
 
