@@ -1,0 +1,5 @@
+.env
+credentials.json
+1password_exports.csv
+google_drive_exported_file_id
+node_modules/
