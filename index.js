@@ -143,7 +143,7 @@ async function tryReadItemDetails(page) {
 }
 
 async function tryWriteToFile(csv) {
-  fs.writeFile(filePath, csv);
+  fs.writeFileSync(filePath, csv);
 
   return filePath;
 }
