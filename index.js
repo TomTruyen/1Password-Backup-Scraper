@@ -46,9 +46,9 @@ const PASSWORD_ITEM_DETAIL_FAVORITED_SELECTOR = '#item-details > header > div > 
 (async () => {
   // Launch browser
   if (isPi()) {
-    browser = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    browser = await puppeteer.launch({ headless: true, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   } else {
-    browser = await launch({ headless: false, product: 'chrome' });
+    browser = await launch({ headless: true, product: 'chrome' });
   }
 
   // Navigate to 1Password
