@@ -1,7 +1,7 @@
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 const dotenv = require('dotenv');
+const puppeteer = require('puppeteer-core');
 const { launch } = require('puppeteer');
 const isPi = require('detect-rpi');
 const { getText, getTextByParts, getFavorited, tryOpenSectionByXPath, sleep } = require('./helpers');
@@ -45,12 +45,11 @@ const PASSWORD_ITEM_DETAIL_FAVORITED_SELECTOR = '#item-details > header > div > 
 
 (async () => {
   // Launch browser
-  if(isPi()) {
-	browser = await launch({ headless: true, executablePath: 'chromium-browser' });
+  if (isPi()) {
+    browser = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser', args: ['--no-sandbox', '--disable-setuid-sandbox'] });
   } else {
-	browser = await launch({ headless: true });  
-  }	  
-  
+    browser = await launch({ headless: false, product: 'chrome' });
+  }
 
   // Navigate to 1Password
   const [page] = await browser.pages();
