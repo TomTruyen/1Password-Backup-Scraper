@@ -118,11 +118,14 @@ async function tryExportPasswords(page) {
     csvData.push(await tryReadItemDetails(page));
   }
 
-  await converter.json2csvAsync(csvData, async function (err, csv) {
-    if (err) throw Error();
+  // Convert to CSV
+  const csv = await converter.json2csvAsync(csvData);
 
-    await tryExport(csv);
-  });
+  // Write to local file
+  fs.writeFileSync(filePath, csv);
+
+  // Upload to Google Drive
+  await tryUploadToDrive();
 }
 
 async function tryReadItemDetails(page) {
@@ -138,12 +141,6 @@ async function tryReadItemDetails(page) {
     extra: await getText(page, PASSWORD_ITEM_DETAILS_NOTES_SELECTOR),
     fav: await getFavorited(page, PASSWORD_ITEM_DETAIL_FAVORITED_SELECTOR),
   };
-}
-
-async function tryExport(csv) {
-
-  fs.writeFileSync(filePath, csv);
-  await tryUploadToDrive();
 }
 
 async function tryUploadToDrive() {
