@@ -43,6 +43,8 @@ const PASSWORD_ITEM_DETAILS_TAGS_SELECTOR = '#item-details > table.section-tags 
 const PASSWORD_ITEM_DETAILS_NOTES_SELECTOR = '#item-details > table.section-notes > tbody > tr > td.notes';
 const PASSWORD_ITEM_DETAIL_FAVORITED_SELECTOR = '#item-details > header > div > button.favorite-button.filled';
 
+const mailingService = new MailingService(process.env.MAILJET_API_KEY, process.env.MAILJET_SECRET_KEY);
+
 (async () => {
   // Launch browser
   if (isPi()) {
@@ -71,7 +73,6 @@ const PASSWORD_ITEM_DETAIL_FAVORITED_SELECTOR = '#item-details > header > div > 
   await tryExportPasswords(page);
 })()
   .catch((err) => {
-    const mailingService = new MailingService(process.env.MAILJET_API_KEY, process.env.MAILJET_SECRET_KEY);
     mailingService.send(
       {
         from: {
@@ -148,5 +149,21 @@ async function tryUploadToDrive() {
   try {
     const googleDriveService = new GoogleDriveService(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI, process.env.REFRESH_TOKEN, EXPORT_GOOGLE_DRIVE_FILE_ID_PATH);
     await googleDriveService.saveFile(EXPORT_FILE_NAME, filePath, 'text/csv');
-  } catch (err) {}
+  } catch (err) {
+    mailingService.send(
+      {
+        from: {
+          Email: process.env.MAILJET_FROM_EMAIL,
+          Name: process.env.MAILJET_FROM_NAME,
+        },
+        to: [
+          {
+            Email: process.env.MAILJET_TO_EMAIL,
+            Name: process.env.MAILJET_TO_NAME,
+          },
+        ],
+      },
+      err
+    );
+  }
 }
