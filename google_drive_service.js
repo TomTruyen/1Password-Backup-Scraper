@@ -2,19 +2,20 @@ const fs = require('fs');
 const { google } = require('googleapis');
 
 class GoogleDriveService {
-  constructor(clientId, clientSecret, redirectUri, refreshToken, fileIdPath) {
+  constructor(fileIdPath) {
     this.fileIdPath = fileIdPath ?? 'drive_backup_file_id.txt';
-    this.driveClient = this.createDriveClient(clientId, clientSecret, redirectUri, refreshToken);
+    this.driveClient = this.createDriveClient();
   }
 
-  createDriveClient(clientId, clientSecret, redirectUri, refreshToken) {
-    const client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
-
-    client.setCredentials({ refresh_token: refreshToken });
+  createDriveClient() {
+    const auth = new google.auth.GoogleAuth({
+      keyFile: 'credentials.json',
+      scopes: 'https://www.googleapis.com/auth/drive',
+    })
 
     return google.drive({
       version: 'v3',
-      auth: client,
+      auth: auth,
     });
   }
 

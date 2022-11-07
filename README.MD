@@ -24,15 +24,17 @@ For people with full access to 1Password it is advised to use the 1Password CLI 
 
 ``EXPORT_GOOGLE_DRIVE_FILE_ID_PATH``=google_drive_exported_file_id
 
-## Google Drive ([Cloud Platform setup](https://developers.google.com/drive/api/quickstart/nodejs#set_up_your_environment))
+## Google Drive
 
-``CLIENT_ID``=
+This works using a Service Accounts which creates the backup in a shared folder that can be accessed from your Google Drive
 
-``CLIENT_SECRET``=
-
-``REFRESH_TOKEN``=(can be obtained using the redirect_uri below)
-
-``REDIRECT_URI``=https://developers.google.com/oauthplayground
+1. Create a Service Account
+2. Click on the created Service Account and go to "Keys"
+3. Add key --> Create new key --> JSON
+4. Save the downloaded file as `credentials.json` in the root of this project
+5. Create a folder on your Google Drive and share it with the e-mail of your created Service Account
+6. Get the Folder ID of the created folder
+7. In `.env` set the `DRIVE_FOLDER_ID` value to the folderId
 
 ## [Mailjet](mailjet.com)
 

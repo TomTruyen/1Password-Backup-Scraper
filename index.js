@@ -147,8 +147,8 @@ async function tryReadItemDetails(page) {
 async function tryUploadToDrive() {
   // This is an optional feature so we don't want to fail the script if it fails
   try {
-    const googleDriveService = new GoogleDriveService(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI, process.env.REFRESH_TOKEN, EXPORT_GOOGLE_DRIVE_FILE_ID_PATH);
-    await googleDriveService.saveFile(EXPORT_FILE_NAME, filePath, 'text/csv');
+    const googleDriveService = new GoogleDriveService(EXPORT_GOOGLE_DRIVE_FILE_ID_PATH);
+    await googleDriveService.saveFile(EXPORT_FILE_NAME, filePath, 'text/csv', process.env.DRIVE_FOLDER_ID);
   } catch (err) {
     mailingService.send(
       {
