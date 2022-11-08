@@ -9,9 +9,9 @@ class GoogleDriveService {
 
   createDriveClient() {
     const auth = new google.auth.GoogleAuth({
-      keyFile: 'credentials.json',
+      keyFile: __dirname + '/credentials.json',
       scopes: 'https://www.googleapis.com/auth/drive',
-    })
+    });
 
     return google.drive({
       version: 'v3',
