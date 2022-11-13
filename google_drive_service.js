@@ -26,14 +26,7 @@ class GoogleDriveService {
   }
 
   async saveFile(fileName, filePath, fileMimeType, folderId = null) {
-    // Delete old file first
-    try {
-      const backupFileId = await this.getFileIdFromFile();
-
-      if (backupFileId) {
-        await this.deleteFile(backupFileId);
-      }
-    } catch (e) {}
+    const backupFileId = await this.getFileIdFromFile();
 
     // Create new file
     const res = await this.driveClient.files.create({
@@ -51,6 +44,13 @@ class GoogleDriveService {
     if (res.status === 200) {
       const fileId = res.data.id;
       await this.saveFileIdToFile(fileId);
+
+      // Delete old file after succesfully uploading new file
+      try {
+        if (backupFileId) {
+          await this.deleteFile(backupFileId);
+        }
+      } catch (e) {}
     }
   }
 
