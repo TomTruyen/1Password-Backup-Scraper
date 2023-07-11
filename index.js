@@ -98,9 +98,15 @@ async function tryPreSignInEmail(page) {
   await page.waitForSelector(EMAIL_FIELD_SELECTOR, { visible: true });
   await page.type(EMAIL_FIELD_SELECTOR, AUTH_EMAIL);
 
+  await page.setRequestInterception(true);
+
+  let monitorRequests = new PuppeteerNetworkMonitor(page);
+
   await page.keyboard.press('Enter');
 
-  await page.waitForNavigation();
+  await monitorRequests.waitForAllRequests();
+
+  await page.setRequestInterception(false);
 }
 
 async function trySignIn(page) {
