@@ -111,8 +111,6 @@ async function trySignIn(page) {
   await page.type(PASSWORD_FIELD_SELECTOR, AUTH_PASSWORD);
 
   await page.keyboard.press('Enter');
-
-  await page.waitForNavigation(ONE_PASSWORD_PRE_SIGN_IN_API_CALL);
 }
 
 async function tryExportPasswords(page) {
