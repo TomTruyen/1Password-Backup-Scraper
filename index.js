@@ -24,6 +24,7 @@ const AUTH_EMAIL = process.env.AUTH_EMAIL;
 const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY;
 const AUTH_PASSWORD = process.env.AUTH_PASSWORD;
 const ONE_PASSWORD_URL = process.env.LOGIN_URL;
+const ONE_PASSWORD_PRE_SIGN_IN_API_CALL = process.env.ONE_PASSWORD_PRE_SIGN_IN_API_CALL
 
 // SELECTORS (1Password) for puppeteer
 const EMAIL_FIELD_SELECTOR = '#email';
@@ -63,10 +64,6 @@ const mailingService = new MailingService(process.env.MAILJET_API_KEY, process.e
   // Sign in
   await trySignIn(page);
 
-  // Open private vault
-  await tryOpenSectionByXPath(page, PRIVATE_VAULT_X_PATH);
-
-  // Wait for navigatino to complete
   await page.waitForNavigation();
 
   // Open logins (so we don't export things like cards or other things)
@@ -98,15 +95,9 @@ async function tryPreSignInEmail(page) {
   await page.waitForSelector(EMAIL_FIELD_SELECTOR, { visible: true });
   await page.type(EMAIL_FIELD_SELECTOR, AUTH_EMAIL);
 
-  await page.setRequestInterception(true);
-
-  let monitorRequests = new PuppeteerNetworkMonitor(page);
-
   await page.keyboard.press('Enter');
 
-  await monitorRequests.waitForAllRequests();
-
-  await page.setRequestInterception(false);
+  await page.waitForResponse()
 }
 
 async function trySignIn(page) {
@@ -121,7 +112,7 @@ async function trySignIn(page) {
 
   await page.keyboard.press('Enter');
 
-  await page.waitForNavigation();
+  await page.waitForNavigation(ONE_PASSWORD_PRE_SIGN_IN_API_CALL);
 }
 
 async function tryExportPasswords(page) {
