@@ -24,7 +24,6 @@ const AUTH_EMAIL = process.env.AUTH_EMAIL;
 const AUTH_SECRET_KEY = process.env.AUTH_SECRET_KEY;
 const AUTH_PASSWORD = process.env.AUTH_PASSWORD;
 const ONE_PASSWORD_URL = process.env.LOGIN_URL;
-const ONE_PASSWORD_PRE_SIGN_IN_API_CALL = process.env.ONE_PASSWORD_PRE_SIGN_IN_API_CALL
 
 // SELECTORS (1Password) for puppeteer
 const EMAIL_FIELD_SELECTOR = '#email';
@@ -97,7 +96,8 @@ async function tryPreSignInEmail(page) {
 
   await page.keyboard.press('Enter');
 
-  await page.waitForResponse()
+  // Wait 10s to make sure the call is completed
+  delay(10000)
 }
 
 async function trySignIn(page) {
@@ -175,4 +175,10 @@ async function tryUploadToDrive() {
       err
     );
   }
+}
+
+function delay(time) {
+  return new Promise(function(resolve) {
+    setTimeout(resolve, time)
+  });
 }
