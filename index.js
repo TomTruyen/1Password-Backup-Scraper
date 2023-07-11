@@ -57,6 +57,9 @@ const mailingService = new MailingService(process.env.MAILJET_API_KEY, process.e
   const [page] = await browser.pages();
   await page.goto(ONE_PASSWORD_URL);
 
+  // Pre-sign in Email Field
+  await tryPreSignInEmail(page)
+
   // Sign in
   await trySignIn(page);
 
@@ -90,6 +93,15 @@ const mailingService = new MailingService(process.env.MAILJET_API_KEY, process.e
     );
   })
   .finally(async () => await browser?.close());
+
+async function tryPreSignInEmail(page) {
+  await page.waitForSelector(EMAIL_FIELD_SELECTOR, { visible: true });
+  await page.type(EMAIL_FIELD_SELECTOR, AUTH_EMAIL);
+
+  await page.keyboard.press('Enter');
+
+  await page.waitForNavigation();
+}
 
 async function trySignIn(page) {
   await page.waitForSelector(EMAIL_FIELD_SELECTOR, { visible: true });
